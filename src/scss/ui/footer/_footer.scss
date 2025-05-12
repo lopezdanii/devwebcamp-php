@@ -1,0 +1,43 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+@use "sass:color";
+
+
+.footer{
+    background-color: v.$azul;
+    color: v.$blanco;
+    margin-top: 5rem;
+    padding-top: 2.5rem;
+
+    &__grid {
+        @include m.contenedor;
+        @include m.tablet{
+            @include m.grid (2, 3rem);
+        }
+    }
+
+    &__logo{
+        @include m.logo;
+        @include m.texto-fluido(2rem, 4rem);
+    }
+    &__texto{
+        line-height: 2;
+        text-align: center;
+        @include m.tablet {
+            text-align: left;
+        }
+    }
+    &__copyright{
+        text-align: center;
+        padding: 2rem 0 ;
+        margin: 0;
+        background-color: color.adjust(v.$azul, $lightness: -10%);
+        font-size: 1.5rem;
+        font-weight: v.$black;
+
+        &--regular {
+            font-weight: v.$regular;
+
+        }
+    }
+}
