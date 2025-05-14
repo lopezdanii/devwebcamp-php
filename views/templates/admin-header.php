@@ -11,23 +11,6 @@
             </form>
 
         </nav>
-
- <!--       <div class="header__contenido">
-        </div>-->
     </div>
 </header>
 
-<!--
-<div class="barra">
-    <div class="barra__contenido">
-        <a href="/" > 
-            <h1 class="barra__logo"> &#60DevWebCamp /></h1>
-        </a>
-        <nav class="navegacion"> 
-            <a href="/devwebcamp" class="navegacion__enlace">Eventos</a>
-            <a href="/paquetes" class="navegacion__enlace">Paquetes</a>
-            <a href="/workshops-conferencias" class="navegacion__enlace"> Workshops /Conferencias</a>
-            <a href="/registro" class="navegacion__enlace">Comprar pase</a>
-        </nav>
-    </div>
-</div> -->
