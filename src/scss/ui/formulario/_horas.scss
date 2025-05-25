@@ -15,11 +15,33 @@
         padding: 1rem;
         text-align: center;
         
-        &:hover{
-            cursor: pointer;
+
+        &--selected {
+            @extend .horas__hora;
             color: v.$blanco;
             background-color: v.$azul;
 
         }
+        &--deshabilitada {
+            @extend .horas__hora;
+            border: 1px solid v.$gris;
+            color: v.$gris;
+            opacity: .5;
+
+            &:hover{
+                cursor: not-allowed;
+            }
+        }
+        &--habilitada {
+            @extend .horas__hora;
+            &:hover{
+                cursor: pointer;
+                color: v.$blanco;
+                background-color: v.$azul;
+    
+            }
+        }
+
+
     }
 }

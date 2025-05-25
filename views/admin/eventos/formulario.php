@@ -3,26 +3,27 @@
 
     <div class="formulario__campo">
         <label class="formulario__label" for="nombre"> Nombre evento </label>
-        <input type="text" class="formulario__input"  id="nombre" name="nombre" placeholder = "Nombre Evento" >
+        <input type="text" class="formulario__input"  id="nombre" name="nombre" placeholder = "Nombre Evento" value="<?php echo $evento->nombre;?>">
 
     </div>
 
     <div class="formulario__campo">
         <label class="formulario__label" for="descripcion"> Descripción evento </label>
-        <textarea  class="formulario__input"  id="descripcion" name="descripcion" placeholder = "Descripción Evento" rows=8></textarea>
+        <textarea  class="formulario__input"  id="descripcion" name="descripcion" placeholder = "Descripción Evento" rows=8 ><?php echo $evento->descripcion;?></textarea>
 
     </div>
 
     <div class="formulario__campo">
         <label class="formulario__label" for="categoria"> Categoría </label>
-        <select class="formulario__select" name="" id="categoria">
-            <option value="" selected disabled>--Seleccionar--</option>
+        <select class="formulario__select" name="categoria_id" id="categoria">
+            <option  selected disabled>--Seleccionar--</option>
             <?php foreach ($categorias as $categoria){ ?>
-                <option value="<?php echo $categoria->id; ?>"><?php echo $categoria->nombre;?></option>
+                <!--Si la categoria es la misma lo marcamos como seleccionado -->
+                <option <?php echo ($evento->categoria_id === $categoria->id) ? 'selected' : '' ?>
+                    value="<?php echo $categoria->id; ?>"> <?php echo $categoria->nombre;?></option>
             
             <?php } ?>
         </select>
-        <textarea  class="formulario__input"  id="descripcion" name="descripcion" placeholder = "Descripción Evento" rows=8></textarea>
 
     </div>
 
@@ -39,15 +40,19 @@
                 
                 <?php }?>
             </div>
+            <input type="hidden" name="dia_id" value="">
     </div>
 
     <div id="horas" class="formulario__campo">
         <label class="formulario__label" for="hora"> Selecciona Hora </label>
-            <ul class="horas">
+            <ul id="horas" class="horas">
                 <?php foreach($horas as $hora) { ?>
-                    <li class="horas__hora"><?php echo $hora->hora;?></li>
+                    <li data-hora-id="<?php echo $hora->id;?>" class="horas__hora horas__hora--deshabilitada"><?php echo $hora->hora;?></li>
                 <?php } ?>
             </ul>
+
+            <input type="hidden" name="hora_id" value="">
+
 
     </div>
 
@@ -64,7 +69,7 @@
 
         <div class="formulario__campo">
             <label class="formulario__label" for="disponibles"> Lugares disponibles </label>
-            <input type="number" class="formulario__input"  id="disponibles"  placeholder = "Ej: 20" min=1 >
+            <input type="number" class="formulario__input"  id="disponibles" name="disponibles" placeholder = "Ej: 20" min="1" value= "<?php echo $evento->disponibles;?>" >
 
         </div>
 
