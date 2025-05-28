@@ -1,5 +1,9 @@
 <?php
 namespace Model;
+
+use stdClass;
+
+#[\AllowDynamicProperties]
 class ActiveRecord {
 
     // Base DE DATOS
@@ -175,7 +179,7 @@ class ActiveRecord {
         $query .= join("', '", array_values($atributos));
         $query .= " ') ";
 
-        // debuguear($query); // Descomentar si no te funciona algo
+        //debuguear($query); // Descomentar si no te funciona algo
 
         // Resultado de la consulta
         $resultado = self::$db->query($query);
@@ -212,5 +216,20 @@ class ActiveRecord {
         $query = "DELETE FROM "  . static::$tabla . " WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1";
         $resultado = self::$db->query($query);
         return $resultado;
+    }
+
+    /**
+     * Devuelve un objeto estandar con las propiedades de este objeto. Al ser estandar,
+     * se le pueden añadir propiedades dinamicas sin problema
+     */
+    public function getStdClass() : stdClass {
+        $object = new stdClass;
+
+        foreach(static::$columnasDB as $column){
+            if(property_exists($this, $column)){
+                $object->column = $this->column;
+            }
+        }
+        return $object;
     }
 }

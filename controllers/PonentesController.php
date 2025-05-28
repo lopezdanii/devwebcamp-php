@@ -49,7 +49,9 @@ class PonentesController {
 
         $ponente= new Ponente;
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
-
+            if(!is_admin()){
+                header('Location: /login');
+            }
             $ponente->sincronizar($_POST);
             
             //Leer imagen
@@ -178,19 +180,17 @@ class PonentesController {
 
     //Lógica para eliminar los ponentes
     public static function eliminar(){
-        if(!is_admin()){
-            header('Location: /login');
-        }
-
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
-
+            if(!is_admin()){
+                header('Location: /login');
+            }
             $id= $_POST['id'];
 
             $ponente= Ponente::find($id);
             if(!isset($ponente)){
                 header('Location: /admin/ponentes');
             }
-            $resultado= $ponente->eliminar($id);
+            $resultado= $ponente->eliminar();
 
             if($resultado){
                 header('Location: /admin/ponentes');
