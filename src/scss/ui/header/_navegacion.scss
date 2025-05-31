@@ -15,7 +15,7 @@
         text-transform: uppercase;
         text-align: center;
 
-
+        &--actual,
         &:hover{
             cursor: pointer;
             color:v.$azul;

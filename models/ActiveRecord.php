@@ -135,6 +135,12 @@ class ActiveRecord {
         return  $resultado ;
     }
 
+    public static function ordenar($columna, $orden){
+        $query = "SELECT * FROM " . static::$tabla . " ORDER BY  $columna $orden";
+        $resultado = self::consultarSQL($query);
+        return $resultado;
+    }
+
 
     // Busqueda Where con Columna 
     public static function where($columna, $valor) {
@@ -142,6 +148,7 @@ class ActiveRecord {
         $resultado = self::consultarSQL($query);
         return array_shift( $resultado ) ;
     }
+
 
     // Busqueda Where con varias condiciones  
     public static function whereArray($array=[]) {
