@@ -3,22 +3,22 @@
 ?>
     <section class="resumen">
         <div class="resumen__grid">
-            <div class="resumen__bloque">
+            <div <?php aos_animacion();?> class="resumen__bloque">
                 <p class="resumen__texto resumen__texto--numero"><?php echo $ponentesTotal;?></p>
                 <p class="resumen__texto">Ponentes</p>
             </div>
 
-            <div class="resumen__bloque">
+            <div <?php aos_animacion();?> class="resumen__bloque">
                 <p class="resumen__texto resumen__texto--numero"><?php echo $conferencias;?></p>
                 <p class="resumen__texto">Conferencias</p>
             </div>
 
-            <div class="resumen__bloque">
+            <div <?php aos_animacion();?> class="resumen__bloque">
                 <p class="resumen__texto resumen__texto--numero"><?php echo $workshops;?></p>
                 <p class="resumen__texto">Workshops</p>
             </div>
 
-            <div class="resumen__bloque">
+            <div <?php aos_animacion();?> class="resumen__bloque">
                 <p class="resumen__texto resumen__texto--numero">500</p>
                 <p class="resumen__texto">Asistentes</p>
             </div>
@@ -30,7 +30,7 @@
         <p class="speakers__descripcion">Conoce a nuestros expertos en DevWebCamp</p>
         <div class="speakers__grid">
             <?php foreach($ponentes as $ponente){?>
-                <div class="speaker">
+                <div <?php aos_animacion();?>class="speaker">
                     <picture>
                         <source srcset="<?php echo $_ENV['HOST'] . '/img/speakers/' . $ponente->imagen;?>.webp" type="image/webp"> 
                         <source srcset="<?php echo $_ENV['HOST'] . '/img/speakers/' . $ponente->imagen;?>.png" type="image/png"> 
@@ -105,19 +105,19 @@
         <p class="boletos__descripcion">Precios para DebWebCamp</p>
 
         <div class="boletos__grid">
-            <div class="boleto boleto--presencial">
+            <div <?php aos_animacion();?> class="boleto boleto--presencial">
                 <h4 class="boleto__logo"> &#60 DevWebCamp /></h4>
                 <p class="boleto__plan">Presencial </p>
                 <p class="boleto__precio">70€ </p>
             </div>
 
-            <div class="boleto boleto--virtual">
+            <div <?php aos_animacion();?> class="boleto boleto--virtual">
                 <h4 class="boleto__logo"> &#60 DevWebCamp /></h4>
                 <p class="boleto__plan">Virtual </p>
                 <p class="boleto__precio">35€ </p>
             </div>
 
-            <div class="boleto boleto--gratis">
+            <div <?php aos_animacion();?> class="boleto boleto--gratis">
                 <h4 class="boleto__logo"> &#60 DevWebCamp /></h4>
                 <p class="boleto__plan">Gratis </p>
                 <p class="boleto__precio">0€ </p>

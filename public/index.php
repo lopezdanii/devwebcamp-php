@@ -2,15 +2,16 @@
 
 require_once __DIR__ . '/../includes/app.php';
 
+use MVC\Router;
 use Controllers\APIEventos;
 use Controllers\APIPonentes;
-use MVC\Router;
 use Controllers\AuthController;
 use Controllers\EventosController;
-use Controllers\PonentesController;
-use Controllers\DashboardController;
 use Controllers\PaginasController;
 use Controllers\RegalosController;
+use Controllers\PonentesController;
+use Controllers\RegistroController;
+use Controllers\DashboardController;
 use Controllers\RegistradosController;
 
 $router = new Router();
@@ -64,11 +65,23 @@ $router->get('/admin/registrados', [RegistradosController::class, 'index']);
 $router->get('/admin/regalos', [RegalosController::class, 'index']);
 
 
+//Registro de usuarios
+$router->get('/finalizar-registro', [RegistroController::class, 'crear']);
+$router->post('/finalizar-registro/gratis', [RegistroController::class, 'gratis']);
+$router->post('/finalizar-registro/pagar', [RegistroController::class, 'pagar']);
+$router->get('/finalizar-registro/conferencias', [RegistroController::class, 'conferencias']);
+
+
+//Boleto virtual
+$router->get('/boleto', [RegistroController::class, 'boleto']);
+
 //Area pública
 $router->get('/', [PaginasController::class, 'index']);
 $router->get('/devwebcamp', [PaginasController::class, 'evento']);
 $router->get('/paquetes', [PaginasController::class, 'paquetes']);
 $router->get('/workshops-conferencias', [PaginasController::class, 'conferencias']);
 
+//404
+$router->get('/404', [PaginasController::class, 'error']);
 
 $router->comprobarRutas();

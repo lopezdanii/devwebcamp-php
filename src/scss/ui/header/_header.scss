@@ -31,10 +31,10 @@
     &__form {
         display: flex;
     }
-
     &__submit {
         @extend .header__enlace;
     }
+
 
     &__contenido {
         padding-top: 10rem;
@@ -77,4 +77,5 @@
             width: auto;
         }
     }
+
 }
