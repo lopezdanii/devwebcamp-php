@@ -88,9 +88,11 @@
         width: auto;
         align-self: self-start;
 
-        &--registrar{
+        &--registrar,
+        &--full {
             width: 100%;
         }
+
     }
 
 }

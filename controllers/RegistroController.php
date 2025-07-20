@@ -13,6 +13,7 @@ use Model\Usuario;
 use Model\Registro;
 use Model\Categoria;
 use Model\EventoHorario;
+use Model\Regalo;
 
 class   RegistroController {
 
@@ -181,9 +182,61 @@ class   RegistroController {
             }
         }
 
+        $regalos= Regalo::all('ASC');
+
+        //manejando el registro mediante $_POST
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            
+            
+            
+            //Revisar que el usuario esta autenticado
+            if(!is_auth()){
+                header("Location: /login");
+            }
+            
+            //Separar eventos del array
+            $eventos = explode(',', $_POST['eventos']);
+            if(empty($eventos)){
+                echo json_encode(['resultado' => false]);
+                return;
+            }
+
+            //Obtener el registro de usuario
+            $registro= Registro::where('usuario_id', $_SESSION['id']);
+
+            if(!isset($registro) || $registro->paquete_id !=="1"){
+                echo json_encode(['resultado' => false]);
+                return;
+            }
+
+            $eventos_array=[];
+            //validar la disponibilidad de los eventos seleccionados en el momento de darle al boton de registrar
+            foreach ($eventos as $evento_id ) {
+                $evento= Evento::find($evento_id);
+
+                //Comprobar que el evento existe
+                if(!isset($evento) || $evento->disponibles === "0"){
+                    echo json_encode(['resultado' => false]);
+                    return;
+                }
+
+                $eventos_array []= $evento;
+
+            }
+
+            //Se actualiza el valor de disponibles a partir del array en memoria
+            foreach ($eventos_array as $evento) {
+                $evento->disponibles-=1;
+                $evento->guardar();
+            
+                //Almacenar el registro
+            }
+        }
+
         $router->render('registro/conferencias', [
             'titulo' => 'Elige Workshops y Conferencias',
-            'eventos' => $eventos_formateados
+            'eventos' => $eventos_formateados,
+            'regalos' => $regalos
         ]);
 
     }

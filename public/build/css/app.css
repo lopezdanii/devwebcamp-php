@@ -326,6 +326,10 @@ img {
   height: auto;
 }
 
+.swal2-popup {
+  font-size: 2rem !important;
+}
+
 h1, h2, h3 {
   font-family: "Outfit", sans-serif;
   font-weight: 900;
@@ -995,7 +999,7 @@ h3 {
   background-color: rgb(0, 98.8729508197, 193);
   cursor: pointer;
 }
-.formulario__submit--registrar {
+.formulario__submit--registrar, .formulario__submit--full {
   width: 100%;
 }
 
@@ -1587,6 +1591,7 @@ h3 {
 @media (min-width: 768px) {
   .eventos-registro {
     display: flex;
+    align-items: flex-start;
     gap: 2rem;
   }
 }
@@ -1607,15 +1612,76 @@ h3 {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-.eventos-registro__heading--conferencias {
-  color: #007df4;
+.eventos-registro__heading--conferencias, .eventos-registro__heading--workshops {
   white-space: nowrap;
   font-size: clamp(2rem, -0.8rem + 10vw, 5rem);
 }
+.eventos-registro__heading--conferencias {
+  color: #007df4;
+}
+.eventos-registro__heading--workshops {
+  color: #00c8c2;
+  margin-top: 5rem;
+}
+.eventos-registro__fecha {
+  margin: 6rem 0 3rem 0;
+}
 
+.registro {
+  background-color: #F8FAFC;
+  padding: 3rem;
+  border-radius: 1rem;
+}
 @media (min-width: 768px) {
   .registro {
     flex: 0 0 40%;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 3rem;
   }
+}
+.registro__evento {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+.registro__evento:nth-child(even) {
+  background-color: rgb(230.15, 237.25, 244.35);
+}
+.registro__heading {
+  margin: 0 0 3rem 0;
+}
+.registro__nombre {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 1rem 0;
+}
+.registro__eliminar {
+  all: unset;
+  color: rgb(169, 0, 0);
+  margin-left: 2rem;
+}
+.registro__eliminar :hover {
+  cursor: pointer;
+}
+.registro__texto {
+  text-align: center;
+}
+.registro__regalo {
+  margin-top: 3rem;
+}
+.registro__label {
+  display: block;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.registro__select {
+  width: 100%;
+  background-color: #FFFFFF;
+  border: 1px solid #64748B;
+  border-radius: 0.5rem;
+  padding: 1rem;
 }
 /*# sourceMappingURL=app.css.map */
