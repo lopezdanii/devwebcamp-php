@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use Classes\Email;
+use Model\Registro;
 use Model\Usuario;
 use MVC\Router;
 
@@ -69,6 +70,28 @@ class AuthController {
     public static function registro(Router $router) {
         $alertas = [];
         $usuario = new Usuario;
+
+        if(is_auth()){
+            //Si el usuario ya esta autenticado comprobamos si tiene registro de eventos
+            $registro = Registro::where('usuario_id', $_SESSION['id']);
+
+            //Si ya esta registrado -> redirigimos al boleto
+            if(isset($registro) ){
+                header('Location: /boleto?id=' . urlencode($registro->token)); //urlencode evit caracteres especiales        
+                return;
+            }else {
+                //si no esta registrado, si es admin le llevamos al dashboard y si no, a finalizar registro
+                if($usuario->admin){
+                    header('Location: /admin/dashboard');
+                    return;
+                }else{
+                    header('Location: /finalizar-registro');
+                    return;
+                }
+            }
+
+        }
+        
 
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
 

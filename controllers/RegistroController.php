@@ -13,6 +13,7 @@ use Model\Usuario;
 use Model\Registro;
 use Model\Categoria;
 use Model\EventoHorario;
+use Model\EventosRegistros;
 use Model\Regalo;
 
 class   RegistroController {
@@ -21,19 +22,24 @@ class   RegistroController {
         
         if(!is_auth()){
             header('Location: /');
+            return;
         }
 
         //Verificar si el usuario ya tiene plan
         $registro = Registro::where('usuario_id', $_SESSION['id']);
 
-        if(isset($registro) && $registro->paquete_id === "3"){
-            header('Location: /boleto?id=' . urlencode($registro->token)); //urlencode evit caracteres especiales
-        
+        //Si el pase es el gratis o virtual-> redirigimos al boleto
+        if(isset($registro) && ($registro->paquete_id === "3" )){//|| $registro->paquete_id === "2")){
+            header('Location: /boleto?id=' . urlencode($registro->token)); //urlencode evit caracteres especiales        
         }
 
+        //Si el pase es el presencial y ya se ha realizado pago (paquete_id seteado) entonces se redirige a selección de conferencias y regalo
+        if(isset($registro) && $registro->paquete_id ==="1") {
+            header('Location: /finalizar-registro/conferencias');
+        }
 
         $router->render('registro/crear', [
-            'titulo' => 'Finzalizar registro'
+            'titulo' => 'Finalizar registro'
         ]);
 
     }
@@ -42,7 +48,8 @@ class   RegistroController {
         
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_auth()){
-                header("Location: /login");
+                header('Location: /login');
+                return;
             }
 
             //Verificar si el usuario ya tiene plan
@@ -50,7 +57,7 @@ class   RegistroController {
 
             if(isset($registro) && $registro->paquete_id === "3"){
                 header('Location: /boleto?id=' . urlencode($registro->token)); //urlencode evit caracteres especiales
-            
+                return;
             }
 
 
@@ -69,6 +76,7 @@ class   RegistroController {
             $resultado= $registro->guardar();
             if($resultado){
                 header('Location: /boleto?id=' . urlencode($registro->token)); //urlencode evit caracteres especiales
+                return;
             }
         }
 
@@ -80,13 +88,15 @@ class   RegistroController {
         $id= $_GET['id'] ;
 
         if(!$id || !strlen($id) === 8){
-            debuguear('Token no valido');
+            header('Location: /');
+            return;
         }
 
         //Buscar en BBDD
         $registro= Registro::where('token', $id);
         if(!$registro){
             header('Location: /');
+            return;
         }
 
         //LLenar las tablas de referencia
@@ -102,11 +112,12 @@ class   RegistroController {
     }
 
 
-    public static function pagar(Router $router){
+    public static function pagar(){
         
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             if(!is_auth()){
-                header("Location: /login");
+                header('Location: /login');
+                return;
             }
 
             //Validar que POST no venga vacio
@@ -126,10 +137,9 @@ class   RegistroController {
                 $registro= new Registro($datos);
                 $resultado= $registro->guardar();
                 echo json_encode($resultado);
-                console.log("Okey...");
+                
                 
             } catch(\Throwable $th){
-                console.log("error...");
                 echo json_encode([
                     'resultado' => 'error'
                 ]);
@@ -146,15 +156,31 @@ class   RegistroController {
         
 
         if(!is_auth()){
-            header("Location: /login");
+            header('Location: /login');
+            return;
         }
         
         //validar que el usuario plan presencial
         $usuario_id= $_SESSION['id'];
         $registro = Registro::where('usuario_id', $usuario_id);
         
-        if($registro->paquete_id !== "1"){
+
+        //Si el pase es el virtual o presencial tras haber completado registro -> redirigimos al boleto
+        if(isset($registro) && ($registro->paquete_id === "2" 
+        || (isset($registro->regalo_id) && $registro->paquete_id === "1" ))) {
+            header('Location: /boleto?id=' . urlencode($registro->token)); //urlencode evit caracteres especiales 
+            return;       
+        }
+        
+       /* //Redireccionar a boleto virtual en caso de haber finalizado su registro y si el pase no es gratis
+        if(isset($registro->regalo_id) && $registro->paquete_id === "1"){
+            header('Location: /boleto?id=' . urlencode($registro->token)); //urlencode evit caracteres especiales
+            return;
+        }*/
+        //Si el pase es gratis, redirimos al menu principal
+        else if(isset($registro) && $registro->paquete_id === "3"){
             header("Location: /");
+            return;
         }
 
 
@@ -187,11 +213,10 @@ class   RegistroController {
         //manejando el registro mediante $_POST
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             
-            
-            
             //Revisar que el usuario esta autenticado
             if(!is_auth()){
-                header("Location: /login");
+                header('Location: /login');
+                return;
             }
             
             //Separar eventos del array
@@ -226,11 +251,34 @@ class   RegistroController {
 
             //Se actualiza el valor de disponibles a partir del array en memoria
             foreach ($eventos_array as $evento) {
-                $evento->disponibles-=1;
+                $evento->disponibles -=1;
                 $evento->guardar();
-            
+                
+                
                 //Almacenar el registro
+                $datos= [
+                    'evento_id' => (int) $evento->id,
+                    'registro_id' => (int) $registro->id
+                ];
+                $registro_usuario = new EventosRegistros($datos);
+                $registro_usuario->guardar();
+                
             }
+                //Almacenar el regalo
+                $registro->sincronizar(['regalo_id' => $_POST['regalo_id'] ]);
+                $resultado= $registro->guardar();
+
+                if($resultado){
+                    echo json_encode([
+                        'resultado' => $resultado,
+                        'token' => $registro->token
+                    ]);
+                } else {
+                    echo json_encode(['resultado' => false]);
+                }
+    
+
+                return;
         }
 
         $router->render('registro/conferencias', [

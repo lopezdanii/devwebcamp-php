@@ -1468,6 +1468,10 @@ h3 {
   width: min(95%, 80rem);
   margin: 0 auto;
 }
+.dashboard__grafica {
+  width: min(95%, 80rem);
+  margin: 0 auto;
+}
 
 .table {
   width: 100%;
@@ -1579,6 +1583,57 @@ h3 {
 .listado-ponentes__ponente--selected {
   color: #FFFFFF;
   background-color: #007df4;
+}
+
+.bloques {
+  /*max-width: 120rem;
+  width:95%;
+  Se puede  hacer con la siguiente linea*/
+  width: min(95%, 140rem);
+  margin: 0 auto;
+}
+.bloques__grid {
+  display: grid;
+  gap: 3rem;
+  grid-template-columns: repeat(1, 1fr);
+}
+@media (min-width: 1024px) {
+  .bloques__grid {
+    display: grid;
+    gap: 3rem;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.bloque {
+  padding: 3rem;
+  color: #FFFFFF;
+  border-radius: 1rem;
+}
+.bloque:nth-child(1) {
+  background-image: linear-gradient(to left top, #F97316, rgb(250.9205020921, 159.8117154812, 96.5794979079));
+}
+.bloque:nth-child(2) {
+  background-image: linear-gradient(to left top, #a855f7, rgb(205.3904494382, 158.0617977528, 250.4382022472));
+}
+.bloque:nth-child(3) {
+  background-image: linear-gradient(to left top, #426a0b, rgb(109.1538461538, 175.3076923077, 18.1923076923));
+}
+.bloque:nth-child(4) {
+  background-image: linear-gradient(to left top, #17769e, rgb(34.5856353591, 167.1132596685, 222.9143646409));
+}
+.bloque__heading {
+  margin: 1rem 0 2rem 0;
+  font-size: 3.5rem;
+}
+.bloque__texto {
+  margin: 1rem 0;
+}
+.bloque__texto--cantidad {
+  margin: 2rem 0;
+  text-align: center;
+  font-weight: 900;
+  font-size: 6rem;
 }
 
 .eventos-registro {

@@ -123,9 +123,9 @@ class ActiveRecord {
 
     // Obtener Registros con cierta cantidad
     public static function get($limite) {
-        $query = "SELECT * FROM " . static::$tabla . " LIMIT $limite ORDER BY id DESC" ;
+        $query = "SELECT * FROM " . static::$tabla . "  ORDER BY id DESC LIMIT $limite " ;
         $resultado = self::consultarSQL($query);
-        return array_shift( $resultado ) ;
+        return $resultado  ;
     }
 
     // Obtener registros de pagina con cierta cantidad
@@ -137,6 +137,12 @@ class ActiveRecord {
 
     public static function ordenar($columna, $orden){
         $query = "SELECT * FROM " . static::$tabla . " ORDER BY  $columna $orden";
+        $resultado = self::consultarSQL($query);
+        return $resultado;
+    }
+    //Devuelve ordenado y con limite
+    public static function ordenarLimit($columna, $orden, $limit){
+        $query = "SELECT * FROM " . static::$tabla . " ORDER BY  $columna $orden LIMIT $limit";
         $resultado = self::consultarSQL($query);
         return $resultado;
     }
@@ -173,6 +179,24 @@ class ActiveRecord {
 
         if($columna){
             $query .=" WHERE $columna='$valor'";
+        }
+        $resultado = self::$db->query($query);
+        return  array_shift( $resultado->fetch_array()) ;
+    }
+
+    //Total de registro con array where
+    //Obtener total de registros
+    public static function totalArray($array = []) {
+        $query = "SELECT COUNT(*) FROM " . static::$tabla . " WHERE ";
+
+        foreach($array as $key => $value){
+            //Si la posicion del array es la ultima no añadimos AND a la query
+            if(array_key_last($array) === $key){
+                $query.= "$key= '$value'";
+                
+            } else {
+                $query.= "$key= '$value' AND ";
+            }
         }
         $resultado = self::$db->query($query);
         return  array_shift( $resultado->fetch_array()) ;
