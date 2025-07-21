@@ -29,7 +29,7 @@ class   RegistroController {
         $registro = Registro::where('usuario_id', $_SESSION['id']);
 
         //Si el pase es el gratis o virtual-> redirigimos al boleto
-        if(isset($registro) && ($registro->paquete_id === "3" )){//|| $registro->paquete_id === "2")){
+        if(isset($registro) && ($registro->paquete_id === "3" || $registro->paquete_id === "2")){
             header('Location: /boleto?id=' . urlencode($registro->token)); //urlencode evit caracteres especiales        
         }
 
@@ -84,6 +84,13 @@ class   RegistroController {
 
     public static function boleto(Router $router){
         
+        //se protegen los boletos si no estás iniciado sesión
+        if(!is_auth()){
+            header('Location: /login');
+            return;
+        }
+
+
         //validar url
         $id= $_GET['id'] ;
 
@@ -95,6 +102,12 @@ class   RegistroController {
         //Buscar en BBDD
         $registro= Registro::where('token', $id);
         if(!$registro){
+            header('Location: /');
+            return;
+        }
+        //debuguear($_SESSION['id']);
+        //Se comprueba que el boleto que se muestra pertenece al mismo usuario que está iniciado sesión
+        if($_SESSION['id'] != $registro->usuario_id){
             header('Location: /');
             return;
         }
@@ -163,20 +176,16 @@ class   RegistroController {
         //validar que el usuario plan presencial
         $usuario_id= $_SESSION['id'];
         $registro = Registro::where('usuario_id', $usuario_id);
-        
+
+        // se valida si el registro se ha completado o no
+        $registroFinalizado = EventosRegistros::where('registro_id', $registro->id);
 
         //Si el pase es el virtual o presencial tras haber completado registro -> redirigimos al boleto
-        if(isset($registro) && ($registro->paquete_id === "2" 
-        || (isset($registro->regalo_id) && $registro->paquete_id === "1" ))) {
+        if((isset($registro) && ($registro->paquete_id === "2" )) || isset($registroFinalizado)) {
             header('Location: /boleto?id=' . urlencode($registro->token)); //urlencode evit caracteres especiales 
             return;       
         }
         
-       /* //Redireccionar a boleto virtual en caso de haber finalizado su registro y si el pase no es gratis
-        if(isset($registro->regalo_id) && $registro->paquete_id === "1"){
-            header('Location: /boleto?id=' . urlencode($registro->token)); //urlencode evit caracteres especiales
-            return;
-        }*/
         //Si el pase es gratis, redirimos al menu principal
         else if(isset($registro) && $registro->paquete_id === "3"){
             header("Location: /");
